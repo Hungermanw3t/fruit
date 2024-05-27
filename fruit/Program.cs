@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Text;
 
 namespace fruit
 {
@@ -12,16 +14,16 @@ namespace fruit
             public string? family { get; set; }
             public string? order { get; set; }
             public string? genus { get; set; }
-            public Nutritions? nutritions { get; set; }
+            public Nutritions nutritions { get; set; }
         }
 
         public class Nutritions
         {
-            public int calories { get; set; }
-            public float fat { get; set; }
-            public float sugar { get; set; }
-            public float carbohydrates { get; set; }
-            public float protein { get; set; }
+            public int? calories { get; set; }
+            public float? fat { get; set; }
+            public float? sugar { get; set; }
+            public float? carbohydrates { get; set; }
+            public float? protein { get; set; }
         }
         #endregion
 
@@ -40,30 +42,123 @@ namespace fruit
                 return;
             }
 
-            do
-            {
-                Console.Clear();
-                Console.Write("Your Name: ");
-                name = Console.ReadLine();
-            } while (name == null || name == "");
-            Console.Clear();
 
-            //Console.WriteLine("Task 1");
-            //Task1("Rosaceae");
+            // task 1
+            Console.WriteLine("Task 1\n");
+            Task1(GetValidFam()); ;
+            WaitForKey();
 
-            //Console.WriteLine("Task 2");
-            //Task2();
 
-            //Console.WriteLine("Task 3");
-            //Task3();
+            // task 2
+            Console.WriteLine("Task 2\n");
+            Task2();
+            WaitForKey();
 
-            //Console.WriteLine("Task 4");
-            //Task4();
 
-            Console.WriteLine("Task 5");
+            // task 3
+            Console.WriteLine("Task 3\n");
+            Task3();
+            WaitForKey();
+
+
+            // task 4
+            Console.WriteLine("Task 4\n");
+            Task4();
+            WaitForKey();
+
+
+            // task 5
+            Console.WriteLine("Task 5\n");
             Task5();
+            WaitForKey();
+
+            // task 6
+            Console.WriteLine("Task 6\n");
+            Task6();
         }
 
+        #region utils
+        private static int CustomReadKey(int length, string prompt)
+        {
+            int index = 0;
+            int digits = GetDigits(length);
+
+            // write prompt
+            Console.Write(prompt);
+            do
+            {
+                // get the next input
+                ConsoleKeyInfo tmpStr = Console.ReadKey(false); ;
+                if (tmpStr.KeyChar == 13)
+                {
+                    break;
+                }
+                else if (!int.TryParse(tmpStr.KeyChar.ToString(), out _))
+                {
+                    continue;
+                }
+
+                index = Convert.ToInt32($"{index}" + tmpStr.KeyChar);
+
+            } while (GetDigits(index) < digits);
+
+            return index;
+        }
+
+        private static int GetDigits(int number)
+        {
+            // if number is larget than 0 then log10(number) else number 
+            number = number > 0 ? (int)Math.Log10(number) + 1 : 1;
+
+            return number;
+        }
+
+        private static string GetValidFam()
+        {
+            bool IsValid = false;
+            string? usrFam;
+            string CorrectFam = "";
+            do
+            {
+                Console.Write("Enter family: ");
+                usrFam = Console.ReadLine();
+                for (int i = 0; i < DsFJ!.Length; i++)
+                {
+                    if (DsFJ[i].family!.Equals(usrFam, StringComparison.OrdinalIgnoreCase))
+                    {
+                        IsValid = true;
+                        CorrectFam = DsFJ[i].family!;
+                    }
+                }
+                Console.Clear();
+            } while (!IsValid);
+
+            return CorrectFam;
+        }
+
+        private static void WaitForKey()
+        {
+            Console.Write("\nPress any key to continue the program . . .");
+            Console.ReadKey();
+            Console.Clear();
+        }
+
+        private static Fruit[] FruitJson()
+        {
+            // check if file exists
+            if (!File.Exists(Path)) { Console.WriteLine("File not found: " + Path); throw new FileNotFoundException { }; }
+
+            // read file
+            string jsonText = File.ReadAllText(Path);
+
+            // deserialise json to an array of fruit objects
+            Fruit[]? fruits = JsonConvert.DeserializeObject<Fruit[]>(jsonText);
+
+            return fruits!;
+        }
+        #endregion
+
+        #region tasks
         private static void Task1(string family)
         {
             // list that gets the name of each fruit that meets the condition
@@ -101,7 +196,13 @@ namespace fruit
             names.Sort();
 
             // writes each name. now in alphabetical order
-            for (int i = names.Count - 1; i >= 0; i--) { Console.WriteLine(names[i]); }
+            for (int i = names.Count - 1; i >= 0; i--)
+            {
+                Console.Write("{0}", names[i]);
+                if (i < names.Count) { Console.Write(", "); }
+            }
+            Console.Write(" \nIn reverse order\n");
+
             return;
         }
 
@@ -142,19 +243,31 @@ namespace fruit
             {
                 Console.WriteLine($"{DsFJ[i].name!.PadLeft(maxlength)}: {DsFJ[i].nutritions!.sugar}");
             }
+            Console.WriteLine();
 
             return;
         }
 
         private static void Task5()
         {
-            // go through each fruit name and check if it starts with users first name
+            // gets users name
+            Console.Write("Your Name: ");
+            name = Console.ReadLine();
+            while (name == null || name == "")
+            {
+                Console.Clear();
+                Console.Write("Your Name: ");
+                name = Console.ReadLine();
+            }
+            Console.Clear();
+
+            // go through each fruit name and check if it starts with users name
             List<string> names = new List<string>();
             for (int i = 0; i < DsFJ!.Length; i++)
             {
-                if (DsFJ[i].name.StartsWith(name, StringComparison.OrdinalIgnoreCase))
+                if (DsFJ[i].name!.StartsWith(name, StringComparison.OrdinalIgnoreCase))
                 {
-                    names.Add(DsFJ[i].name);
+                    names.Add(DsFJ[i].name!);
                 }
             }
 
@@ -168,25 +281,51 @@ namespace fruit
                     if (i == names.Count - 2) { Console.Write(" and "); }
                     else if (i < names.Count - 1) { Console.Write(", "); }
                 }
-                Console.Write(" Start with {0}", name); 
+                if (names.Count != 1)
+                {
+                    Console.Write(" start with {0}", name);
+                }
+                else Console.Write(" starts with {0}", name);
             }
-            else { Console.WriteLine("There are no fruits that start with {0} in the given data"); }
+            else { Console.WriteLine("There are no fruits that start with {0} in the given data", name); }
             
             return;
         }
 
-        private static Fruit[] FruitJson()
+        private static void Task6()
         {
-            // check if file exists
-            if (!File.Exists(Path)) { Console.WriteLine("File not found: " + Path); throw new FileNotFoundException { }; }
+            
+            // outputs each fruit and their index
+            for (int i = 0; i < DsFJ!.Length; i++)
+            {
+                Console.WriteLine($"{i + 1}: {DsFJ[i].name}");
+            }
 
-            // read file
-            string jsonText = File.ReadAllText(Path);
+            // get input
+            int index = CustomReadKey(DsFJ.Length, "\nSelect fruit by typing number: ") - 1;
+            // makes sure anything after is after the read key
+            Console.WriteLine();
 
-            // deserialise json to an array of fruit objects
-            Fruit[]? fruits = JsonConvert.DeserializeObject<Fruit[]>(jsonText);
+            string finalOut = $@"
 
-            return fruits!;
+Name: {DsFJ[index].name} 
+Id: {DsFJ[index].id}
+Family: {DsFJ[index].family}
+Order: {DsFJ[index].order}
+Genus: {DsFJ[index].genus}
+Nutrition
+    Calories: {DsFJ[index].nutritions.calories}
+    Fat: {DsFJ[index].nutritions.fat}
+    Sugar: {DsFJ[index].nutritions.sugar}
+    Carbohydrates: {DsFJ[index].nutritions.carbohydrates}
+    Protein: {DsFJ[index].nutritions.protein}
+";
+
+            Console.WriteLine(finalOut);
+            
         }
+        #endregion
+
+
     }
 }
