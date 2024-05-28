@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace fruit
@@ -78,13 +79,22 @@ namespace fruit
         }
 
         #region utils
+        private static void CustonWrite(string buffer)
+        {
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                Console.Write(buffer[i]);
+                Thread.Sleep(1);
+            }
+        }
+        
         private static int CustomReadKey(int length, string prompt)
         {
             int index = 0;
             int digits = GetDigits(length);
 
             // write prompt
-            Console.Write(prompt);
+            CustonWrite(prompt);
             do
             {
                 // get the next input
@@ -120,7 +130,7 @@ namespace fruit
             string CorrectFam = "";
             do
             {
-                Console.Write("Enter family: ");
+                CustonWrite("Enter family: ");
                 usrFam = Console.ReadLine();
                 for (int i = 0; i < DsFJ!.Length; i++)
                 {
@@ -138,7 +148,7 @@ namespace fruit
 
         private static void WaitForKey()
         {
-            Console.Write("\nPress any key to continue the program . . .");
+            CustonWrite("\nPress any key to continue the program . . .");
             Console.ReadKey();
             Console.Clear();
         }
@@ -161,6 +171,8 @@ namespace fruit
         #region tasks
         private static void Task1(string family)
         {
+            StringBuilder sb = new StringBuilder();
+
             // list that gets the name of each fruit that meets the condition
             List<string> names = new List<string>();
             for (int i = 0; i < DsFJ!.Length; i++)
@@ -174,17 +186,20 @@ namespace fruit
             // writes the fruit names in a , seperated list. last , is replaced by "and"
             for (int i = 0; i < names.Count; i++)
             {
-                Console.Write("{0}", names[i]);
-                if (i == names.Count - 2) { Console.Write(" and "); }
-                else if (i < names.Count - 1) { Console.Write(", "); }
+                sb.Append($"{names[i]}");
+                if (i == names.Count - 2) { sb.Append(" and "); }
+                else if (i < names.Count - 1) { sb.Append(", "); }
             }
-            Console.Write(" are all part of the {0} family\n\n", family);
+            sb.Append($" are all part of the {family} family\n\n");
 
+            CustonWrite(sb.ToString());
             return;
         }
 
         private static void Task2()
         {
+            StringBuilder sb = new StringBuilder();
+
             // adds just the name of each fruit object so they can be sorted
             List<string> names = new List<string>();
             for (int i = 0; i < DsFJ!.Length; i++)
@@ -198,16 +213,19 @@ namespace fruit
             // writes each name. now in alphabetical order
             for (int i = names.Count - 1; i >= 0; i--)
             {
-                Console.Write("{0}", names[i]);
-                if (i < names.Count) { Console.Write(", "); }
+                sb.Append($"{names[i]}");
+                if (i < names.Count) { sb.Append(", "); }
             }
-            Console.Write(" \nIn reverse order\n");
+            sb.Append(" \nIn reverse order\n");
 
+            CustonWrite(sb.ToString());
             return;
         }
 
         private static void Task3()
         {
+            StringBuilder sb = new StringBuilder();
+
             // list that gets the name of each fruit that meets the condition
             List<string> names = new List<string>();
             for (int i = 0; i < DsFJ!.Length; i++)
@@ -221,28 +239,34 @@ namespace fruit
             // writes the fruit names in a , seperated list. last , is replaced by "and"
             for (int i = 0; i < names.Count; i++)
             {
-                Console.Write("{0}", names[i]);
-                if (i == names.Count - 2) { Console.Write(" and "); }
-                else if (i < names.Count - 1) { Console.Write(", "); }
+                sb.Append($"{names[i]}");
+                if (i == names.Count - 2) { sb.Append(" and "); }
+                else if (i < names.Count - 1) { sb.Append(", "); }
             }
-            Console.Write(" all have more than 100 calories");
+            sb.Append(" all have more than 100 calories");
+
+            CustonWrite(sb.ToString());
 
             return;
         }
 
         private static void Task4()
         {
+            StringBuilder sb = new StringBuilder();
+
             // makes a padding value to align each line
             int maxlength = DsFJ!.Max(x => x.name!.Length);
 
             // indicates what each column means
-            Console.WriteLine("NAME".PadLeft(maxlength) + ": SUGAR");
+            sb.AppendLine("NAME".PadLeft(maxlength) + ": SUGAR");
 
             // writes to the console with each fruit and its sugar value (formatted)
             for (int i = 0; i < DsFJ!.Length; i++)
             {
-                Console.WriteLine($"{DsFJ[i].name!.PadLeft(maxlength)}: {DsFJ[i].nutritions!.sugar}");
+                sb.AppendLine($"{DsFJ[i].name!.PadLeft(maxlength)}: {DsFJ[i].nutritions!.sugar}");
             }
+            CustonWrite(sb.ToString());
+
             Console.WriteLine();
 
             return;
@@ -250,13 +274,15 @@ namespace fruit
 
         private static void Task5()
         {
+            StringBuilder sb = new StringBuilder();
+
             // gets users name
-            Console.Write("Your Name: ");
+            CustonWrite("Your Name: ");
             name = Console.ReadLine();
             while (name == null || name == "")
             {
                 Console.Clear();
-                Console.Write("Your Name: ");
+                CustonWrite("Your Name: ");
                 name = Console.ReadLine();
             }
             Console.Clear();
@@ -271,24 +297,27 @@ namespace fruit
                 }
             }
 
-            // writes the fruit names in a "," seperated list. last "," is replaced by "and"
+            // writes the fruit names in a "," seperated list. last "," is replaced with "and"
 
             if (names.Count != 0)
             {
                 for (int i = 0; i < names.Count; i++)
                 {
-                    Console.Write("{0}", names[i]);
-                    if (i == names.Count - 2) { Console.Write(" and "); }
-                    else if (i < names.Count - 1) { Console.Write(", "); }
+                    
+                    sb.Append($"{names[i]}");
+                    if (i == names.Count - 2) { sb.Append(" and "); }
+                    else if (i < names.Count - 1) { sb.Append(", "); }
                 }
                 if (names.Count != 1)
                 {
-                    Console.Write(" start with {0}", name);
+                    sb.Append($" start with {name}");
                 }
-                else Console.Write(" starts with {0}", name);
+                else sb.Append($" starts with {name}");
             }
-            else { Console.WriteLine("There are no fruits that start with {0} in the given data", name); }
+            else { sb.AppendLine($"There are no fruits that start with {name} in the given data"); }
             
+            CustonWrite(sb.ToString());
+
             return;
         }
 
@@ -321,7 +350,7 @@ Nutrition
     Protein: {DsFJ[index].nutritions.protein}
 ";
 
-            Console.WriteLine(finalOut);
+            CustonWrite(finalOut);
             
         }
         #endregion
