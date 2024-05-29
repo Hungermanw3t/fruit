@@ -45,41 +45,41 @@ namespace fruit
 
 
             // task 1
-            Console.WriteLine("Task 1\n");
+            CustomWrite("Task 1\n");
             Task1(GetValidFam()); ;
             WaitForKey();
 
 
             // task 2
-            Console.WriteLine("Task 2\n");
+            CustomWrite("Task 2\n");
             Task2();
             WaitForKey();
 
 
             // task 3
-            Console.WriteLine("Task 3\n");
+            CustomWrite("Task 3\n");
             Task3();
             WaitForKey();
 
 
             // task 4
-            Console.WriteLine("Task 4\n");
+            CustomWrite("Task 4\n");
             Task4();
             WaitForKey();
 
 
             // task 5
-            Console.WriteLine("Task 5\n");
+            CustomWrite("Task 5\n");
             Task5();
             WaitForKey();
 
             // task 6
-            Console.WriteLine("Task 6\n");
+            CustomWrite("Task 6\n");
             Task6();
         }
 
         #region utils
-        private static void CustonWrite(string buffer)
+        private static void CustomWrite(string buffer)
         {
             for (int i = 0; i < buffer.Length; i++)
             {
@@ -94,7 +94,7 @@ namespace fruit
             int digits = GetDigits(length);
 
             // write prompt
-            CustonWrite(prompt);
+            CustomWrite(prompt);
             do
             {
                 // get the next input
@@ -130,7 +130,7 @@ namespace fruit
             string CorrectFam = "";
             do
             {
-                CustonWrite("Enter family: ");
+                CustomWrite("Enter family: ");
                 usrFam = Console.ReadLine();
                 for (int i = 0; i < DsFJ!.Length; i++)
                 {
@@ -148,7 +148,7 @@ namespace fruit
 
         private static void WaitForKey()
         {
-            CustonWrite("\nPress any key to continue the program . . .");
+            CustomWrite("\nPress any key to continue the program . . .");
             Console.ReadKey();
             Console.Clear();
         }
@@ -192,7 +192,7 @@ namespace fruit
             }
             sb.Append($" are all part of the {family} family\n\n");
 
-            CustonWrite(sb.ToString());
+            CustomWrite(sb.ToString());
             return;
         }
 
@@ -218,7 +218,7 @@ namespace fruit
             }
             sb.Append(" \nIn reverse order\n");
 
-            CustonWrite(sb.ToString());
+            CustomWrite(sb.ToString());
             return;
         }
 
@@ -245,7 +245,7 @@ namespace fruit
             }
             sb.Append(" all have more than 100 calories");
 
-            CustonWrite(sb.ToString());
+            CustomWrite(sb.ToString());
 
             return;
         }
@@ -265,7 +265,7 @@ namespace fruit
             {
                 sb.AppendLine($"{DsFJ[i].name!.PadLeft(maxlength)}: {DsFJ[i].nutritions!.sugar}");
             }
-            CustonWrite(sb.ToString());
+            CustomWrite(sb.ToString());
 
             Console.WriteLine();
 
@@ -277,12 +277,12 @@ namespace fruit
             StringBuilder sb = new StringBuilder();
 
             // gets users name
-            CustonWrite("Your Name: ");
+            CustomWrite("Your Name: ");
             name = Console.ReadLine();
             while (name == null || name == "")
             {
                 Console.Clear();
-                CustonWrite("Your Name: ");
+                CustomWrite("Your Name: ");
                 name = Console.ReadLine();
             }
             Console.Clear();
@@ -316,7 +316,7 @@ namespace fruit
             }
             else { sb.AppendLine($"There are no fruits that start with {name} in the given data"); }
             
-            CustonWrite(sb.ToString());
+            CustomWrite(sb.ToString());
 
             return;
         }
@@ -350,7 +350,7 @@ Nutrition
     Protein: {DsFJ[index].nutritions.protein}
 ";
 
-            CustonWrite(finalOut);
+            CustomWrite(finalOut);
             
         }
         #endregion
